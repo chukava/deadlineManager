@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 public class DeadlineTest {
 
     @Autowired
-    private MockMvc mvc; //simuluje kontrolery
+    private MockMvc mvc;
 
     @Test
     public void getDeadline() throws Exception {

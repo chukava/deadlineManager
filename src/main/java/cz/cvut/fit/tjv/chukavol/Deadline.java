@@ -27,7 +27,6 @@ public class Deadline {
         return maxPoints;
     }
 
-
     public boolean getIsDone() {
         return isDone;
     }
