@@ -28,7 +28,7 @@ public class Deadline {
     }
 
 
-    public boolean isDone() {
+    public boolean getIsDone() {
         return isDone;
     }
 }
