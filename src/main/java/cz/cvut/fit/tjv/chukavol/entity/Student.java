@@ -2,10 +2,7 @@ package cz.cvut.fit.tjv.chukavol.entity;
 
 import com.sun.istack.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 
 
@@ -17,11 +14,13 @@ public class Student {
     private int studentId;
 
     @NotNull
+    @Column(unique = true)
     private String studentUsername;
 
     @NotNull
     private String password;
 
+    @NotNull
     private int grade;
 
     @ManyToMany(mappedBy = "students")

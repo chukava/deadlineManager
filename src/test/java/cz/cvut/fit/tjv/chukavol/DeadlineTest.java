@@ -13,17 +13,4 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 public class DeadlineTest {
 
-    @Autowired
-    private MockMvc mvc;
-
-    @Test
-    public void getDeadline() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/deadline")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(
-                        "{\"taskDescription\":\"Prvni kontrolni bod semestralky\",\"deadlineDate\":\"06.10.2020\",\"maxPoints\":100,\"isDone\":true}")
-                );
-    }
-
 }
