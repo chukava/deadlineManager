@@ -37,6 +37,12 @@ public class Student {
         this.deadlines = deadlines;
     }
 
+    public Student(String studentUsername, String password, int grade) {
+        this.studentUsername = studentUsername;
+        this.password = password;
+        this.grade = grade;
+    }
+
     public int getStudentId() {
         return studentId;
     }

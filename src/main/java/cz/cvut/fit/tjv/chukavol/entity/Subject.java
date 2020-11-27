@@ -36,6 +36,11 @@ public class Subject {
         this.deadlines = deadlines;
     }
 
+    public Subject(String subjectCode, int numberOfCredits) {
+        this.subjectCode = subjectCode;
+        this.numberOfCredits = numberOfCredits;
+    }
+
     public int getSubjectId() {
         return subjectId;
     }

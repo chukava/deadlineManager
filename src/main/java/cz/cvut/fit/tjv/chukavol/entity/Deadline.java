@@ -36,9 +36,6 @@ public class Deadline {
     @ManyToOne
     private Subject subject;
 
-    @NotNull
-    @ManyToOne
-    private  Teacher teacher;
 
     public Deadline() {
     }
@@ -48,15 +45,13 @@ public class Deadline {
                     int maxPoints,
                     Boolean isDone,
                     List<Student> students,
-                    Subject subject,
-                    Teacher teacher) {
+                    Subject subject) {
         this.taskDescription = taskDescription;
         this.deadlineDate = deadlineDate;
         this.maxPoints = maxPoints;
         this.isDone = isDone;
         this.students = students;
         this.subject = subject;
-        this.teacher = teacher;
     }
 
     public int getDeadlineId() {
@@ -111,11 +106,4 @@ public class Deadline {
         this.subject = subject;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
 }
