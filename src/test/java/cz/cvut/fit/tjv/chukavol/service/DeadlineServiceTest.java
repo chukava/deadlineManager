@@ -173,44 +173,44 @@ public class DeadlineServiceTest {
         Integer idProvided = argumentCaptor.getValue();
         Assertions.assertEquals(idProvided, 51);
     }
-//
-//    @Test
-//    void create() throws Exception {
-//        //creating  deadlineToReturn that should be returned for ANY integer passed to save
-//        Student student1 = new Student("chukavol", "iLoveCoding1", 1, null);
-//        Student student2 = new Student("chukavol2", "iLoveCoding2", 2, null);
-//        ReflectionTestUtils.setField(student1, "studentId", 31);
-//        ReflectionTestUtils.setField(student2, "studentId", 32);
-//        List<Student> studentToReturn1 = Arrays.asList(student1, student2);
-//
-//        BDDMockito.given(studentService.findAllByIds(Mockito.any(List.class))).willReturn(Arrays.asList(student1, student2));
-//
-//
-//        Subject subject1 = new Subject("BI-AG1", 6);
-//        ReflectionTestUtils.setField(subject1, "subjectId", 41);
-//
-//        BDDMockito.given(subjectService.findById(Mockito.any(Integer.class))).willReturn(Optional.of(subject1));
-//
-//
-//        Deadline deadlineToReturn = new Deadline("d.u.1.", "21.12.2020", 1, false, studentToReturn1, subject1);
-//        ReflectionTestUtils.setField(deadlineToReturn, "deadlineId", 51);
-//
-//
-//        List<Integer> stId1 = Arrays.asList(31,32);
-//        DeadlineCreateDTO deadlineCreateDTO = new DeadlineCreateDTO("d.u.1.", "21.12.2020", 1, false, stId1, 41);
-//        BDDMockito.given(deadlineRepositoryMock.save(any(Deadline.class))).willReturn(deadlineToReturn);
-//
-//        DeadlineDTO returnedDeadline = deadlineService.create(deadlineCreateDTO);
-//
-//        Assertions.assertEquals(returnedDeadline.getDeadlineId(), 51);
-//        Assertions.assertEquals(returnedDeadline.getTaskDescription(), "d.u.1.");
-//        Assertions.assertEquals(returnedDeadline.getDeadlineDate(), "21.12.2020");
-//        Assertions.assertEquals(returnedDeadline.getMaxPoints(), 1);
-//        Assertions.assertEquals(returnedDeadline.getIsDone(), false);
-//        Assertions.assertEquals(returnedDeadline.getStudentsId(), stId1);
-//        Assertions.assertEquals(returnedDeadline.getSubjectId(), 41);
-//    }
-//
+
+    @Test
+    void create() throws Exception {
+        //creating  deadlineToReturn that should be returned for ANY integer passed to save
+        Student student1 = new Student("chukavol", "iLoveCoding1", 1, null);
+        Student student2 = new Student("chukavol2", "iLoveCoding2", 2, null);
+        ReflectionTestUtils.setField(student1, "studentId", 31);
+        ReflectionTestUtils.setField(student2, "studentId", 32);
+        List<Student> studentToReturn1 = Arrays.asList(student1, student2);
+
+        BDDMockito.given(studentService.findAllByIds(Mockito.any(List.class))).willReturn(Arrays.asList(student1, student2));
+
+
+        Subject subject1 = new Subject("BI-AG1", 6);
+        ReflectionTestUtils.setField(subject1, "subjectId", 41);
+
+        BDDMockito.given(subjectService.findById(Mockito.any(Integer.class))).willReturn(Optional.of(subject1));
+
+
+        Deadline deadlineToReturn = new Deadline("d.u.1.", "21.12.2020", 1, false, studentToReturn1, subject1);
+        ReflectionTestUtils.setField(deadlineToReturn, "deadlineId", 51);
+
+
+        List<Integer> stId1 = Arrays.asList(31,32);
+        DeadlineCreateDTO deadlineCreateDTO = new DeadlineCreateDTO("d.u.1.", "21.12.2020", 1, false, stId1, 41);
+        BDDMockito.given(deadlineRepositoryMock.save(any(Deadline.class))).willReturn(deadlineToReturn);
+
+        DeadlineDTO returnedDeadline = deadlineService.create(deadlineCreateDTO);
+
+        Assertions.assertEquals(returnedDeadline.getDeadlineId(), 51);
+        Assertions.assertEquals(returnedDeadline.getTaskDescription(), "d.u.1.");
+        Assertions.assertEquals(returnedDeadline.getDeadlineDate(), "21.12.2020");
+        Assertions.assertEquals(returnedDeadline.getMaxPoints(), 1);
+        Assertions.assertEquals(returnedDeadline.getIsDone(), false);
+        Assertions.assertEquals(returnedDeadline.getStudentsId(), stId1);
+        Assertions.assertEquals(returnedDeadline.getSubjectId(), 41);
+    }
+
     @Test
     void update() throws Exception {
         //creating  deadlineToReturn that should be returned for ANY integer passed to save
