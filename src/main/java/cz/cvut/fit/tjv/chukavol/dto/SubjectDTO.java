@@ -8,16 +8,13 @@ public class SubjectDTO {
     private int subjectId;
     private  String subjectCode;
     private int numberOfCredits;
-    private List<Deadline> deadlines;
 
     public SubjectDTO(int subjectId,
                       String subjectCode,
-                      int numberOfCredits,
-                      List<Deadline> deadlines) {
+                      int numberOfCredits) {
         this.subjectId = subjectId;
         this.subjectCode = subjectCode;
         this.numberOfCredits = numberOfCredits;
-        this.deadlines = deadlines;
     }
 
     public int getSubjectId() {
@@ -32,7 +29,4 @@ public class SubjectDTO {
         return numberOfCredits;
     }
 
-    public List<Deadline> getDeadlines() {
-        return deadlines;
-    }
 }

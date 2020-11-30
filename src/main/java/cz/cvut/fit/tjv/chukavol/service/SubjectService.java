@@ -4,8 +4,10 @@ import cz.cvut.fit.tjv.chukavol.dto.SubjectCreateDTO;
 import cz.cvut.fit.tjv.chukavol.dto.SubjectDTO;
 import cz.cvut.fit.tjv.chukavol.entity.Subject;
 import cz.cvut.fit.tjv.chukavol.repository.SubjectRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +18,8 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
 
 
-    public SubjectService(SubjectRepository subjectRepository){//, DeadlineRepository deadlineRepository) {
+    public SubjectService(SubjectRepository subjectRepository){
         this.subjectRepository = subjectRepository;
-
     }
 
     public List<SubjectDTO> findAll() {
@@ -29,10 +30,6 @@ public class SubjectService {
                 .collect(Collectors.toList());
     }
 
-    public List<Subject> findByIds(List<Integer> ids){
-        return subjectRepository.findAllById((ids));
-    }
-
     public Optional<Subject> findById(int id){
         return subjectRepository.findById(id);
     }
@@ -41,8 +38,7 @@ public class SubjectService {
         return toDTO(findById(id));
     }
 
-
-    public SubjectDTO create(SubjectCreateDTO subjectCreateDTO){
+    public SubjectDTO create(SubjectCreateDTO subjectCreateDTO){ //done
         return toDTO(subjectRepository.save(
                 new Subject(subjectCreateDTO.getSubjectCode(),
                         subjectCreateDTO.getNumberOfCredits())));
@@ -57,15 +53,21 @@ public class SubjectService {
         Subject subject = optionalSubject.get();
         subject.setSubjectCode(subjectCreateDTO.getSubjectCode());
         subject.setNumberOfCredits(subjectCreateDTO.getNumberOfCredits());
-        subject.setDeadlines(subjectCreateDTO.getDeadlines());
         return toDTO(subject);
     }
+
+    public void deleteById(int id) throws Exception {
+        if (!subjectRepository.existsById(id)) {
+            throw new Exception("no such subject");
+        }
+        subjectRepository.deleteById(id);
+    }
+
 
     private SubjectDTO toDTO(Subject subject){
         return new SubjectDTO(subject.getSubjectId(),
                 subject.getSubjectCode(),
-                subject.getNumberOfCredits(),
-                subject.getDeadlines());
+                subject.getNumberOfCredits());
     }
 
     private Optional<SubjectDTO> toDTO(Optional<Subject> optionalSubject) {

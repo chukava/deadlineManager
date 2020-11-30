@@ -2,11 +2,14 @@ package cz.cvut.fit.tjv.chukavol.service;
 
 import cz.cvut.fit.tjv.chukavol.dto.StudentCreateDTO;
 import cz.cvut.fit.tjv.chukavol.dto.StudentDTO;
+import cz.cvut.fit.tjv.chukavol.entity.Deadline;
 import cz.cvut.fit.tjv.chukavol.entity.Student;
 import cz.cvut.fit.tjv.chukavol.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +19,10 @@ import java.util.stream.Collectors;
 public class StudentService {
     private final StudentRepository studentRepository;
 
-    @Autowired
-    public StudentService(StudentRepository studentRepository){ //, DeadlineService deadlineService) {
-        this.studentRepository = studentRepository;
 
+    @Autowired
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
     public List<StudentDTO> findAll() {
@@ -31,7 +34,7 @@ public class StudentService {
     }
 
     public List<Student> findAllByIds(List<Integer> ids){
-        return studentRepository.findAllById((ids));
+        return studentRepository.findAllById(ids);
     }
 
     public Optional<Student> findById(int id){
@@ -57,21 +60,38 @@ public class StudentService {
         if (optionalStudent.isEmpty()) {
             throw new Exception("no such student");
         }
+
         Student student = optionalStudent.get();
         student.setStudentUsername(studentCreateDTO.getStudentUsername());
         student.setPassword(studentCreateDTO.getPassword());
         student.setPassword(studentCreateDTO.getPassword());
-        student.setDeadlines(studentCreateDTO.getDeadlines());
         return toDTO(student);
+    }
+
+    public void deleteById(int id) throws Exception {
+        if (!studentRepository.existsById(id)) {
+            throw new Exception("no such student");
+        }
+        studentRepository.deleteById(id);
     }
 
 
     private StudentDTO toDTO(Student student){
-        return new StudentDTO(student.getStudentId(),
+        if(student.getDeadlines() == null){
+            return new StudentDTO(
+                    student.getStudentId(),
+                    student.getStudentUsername(),
+                    student.getPassword(),
+                    student.getGrade(),null);
+        }
+        return new StudentDTO(
+                student.getStudentId(),
                 student.getStudentUsername(),
                 student.getPassword(),
                 student.getGrade(),
-                student.getDeadlines());
+                student.getDeadlines().stream().
+                        map(Deadline::getDeadlineId)
+                        .collect(Collectors.toList()));
     }
 
     private Optional<StudentDTO> toDTO(Optional<Student> optionalStudent) {

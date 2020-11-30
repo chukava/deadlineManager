@@ -1,5 +1,6 @@
 package cz.cvut.fit.tjv.chukavol.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 import javax.persistence.Entity;
@@ -21,19 +22,12 @@ public class Subject {
     @NotNull
     private int numberOfCredits;
 
-    @OneToMany(mappedBy = "subject")
-    private List<Deadline> deadlines;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "subject")
+//    private List<Deadline> deadlines;
 
 
     public Subject() {
-    }
-
-    public Subject(String subjectCode,
-                   int numberOfCredits,
-                   List<Deadline> deadlines) {
-        this.subjectCode = subjectCode;
-        this.numberOfCredits = numberOfCredits;
-        this.deadlines = deadlines;
     }
 
     public Subject(String subjectCode, int numberOfCredits) {
@@ -61,11 +55,4 @@ public class Subject {
         this.numberOfCredits = numberOfCredits;
     }
 
-    public List<Deadline> getDeadlines() {
-        return deadlines;
-    }
-
-    public void setDeadlines(List<Deadline> deadlines) {
-        this.deadlines = deadlines;
-    }
 }

@@ -1,5 +1,6 @@
 package cz.cvut.fit.tjv.chukavol.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Student {
 
     @NotNull
     private int grade;
+
 
     @ManyToMany(mappedBy = "students")
     private List<Deadline> deadlines;

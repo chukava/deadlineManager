@@ -5,10 +5,10 @@ import cz.cvut.fit.tjv.chukavol.entity.Deadline;
 import cz.cvut.fit.tjv.chukavol.entity.Student;
 import cz.cvut.fit.tjv.chukavol.entity.Subject;
 import cz.cvut.fit.tjv.chukavol.repository.DeadlineRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.server.ResponseStatusException;
 import javax.transaction.Transactional;
-import javax.xml.bind.annotation.XmlType;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,9 +33,6 @@ public class DeadlineService {
                 .collect(Collectors.toList());
     }
 
-    public List<Deadline> findByIds(List<Integer> ids){
-        return deadlineRepository.findAllById((ids));
-    }
 
     public Optional<Deadline> findById(int id){
         return deadlineRepository.findById(id);
@@ -49,17 +46,11 @@ public class DeadlineService {
     @Transactional
     public DeadlineDTO create(DeadlineCreateDTO deadlineCreateDTO) throws Exception {
         List<Student> student = studentService.findAllByIds(deadlineCreateDTO.getStudentsId());
-
-        if( student.size() != deadlineCreateDTO.getStudentsId().size() ) {
+        if( student.size() != deadlineCreateDTO.getStudentsId().size() || student.size() == 0) {
             throw new Exception("some students not found");
         }
-        if(student.size() == 0) {
-            throw new Exception("no students found");
-        }
-
         Subject subject = subjectService.findById(deadlineCreateDTO.getSubjectId())
                 .orElseThrow(() -> new Exception("subject not found"));
-
         return toDTO(deadlineRepository.save(
                 new Deadline(
                         deadlineCreateDTO.getTaskDescription(),
@@ -74,24 +65,16 @@ public class DeadlineService {
 
     @Transactional
     public DeadlineDTO update(int id, DeadlineCreateDTO deadlineCreateDTO) throws Exception {
-
         Optional<Deadline> optionalDeadline = deadlineRepository.findById(id);
         if (optionalDeadline.isEmpty()) {
             throw new Exception("no such deadline");
         }
-
         List<Student> students = studentService.findAllByIds(deadlineCreateDTO.getStudentsId());
-
-        if( students.size() != deadlineCreateDTO.getStudentsId().size() ) {
+        if( students.size() != deadlineCreateDTO.getStudentsId().size() || students.size() == 0 ) {
             throw new Exception("some students not found");
         }
-        if(students.size() == 0) {
-            throw new Exception("no students found");
-        }
-
         Subject subject = subjectService.findById(deadlineCreateDTO.getSubjectId())
                 .orElseThrow(() -> new Exception("subject not found"));
-
         Deadline deadline = optionalDeadline.get();
         deadline.setTaskDescription(deadlineCreateDTO.getTaskDescription());
         deadline.setDeadlineDate(deadlineCreateDTO.getDeadlineDate());
@@ -99,10 +82,16 @@ public class DeadlineService {
         deadline.setIsDone(deadlineCreateDTO.getIsDone());
         deadline.setStudents(students);
         deadline.setSubject(subject);
+
         return toDTO(deadline);
     }
 
-
+    public void deleteById(int id) throws Exception {
+        if (!deadlineRepository.existsById(id)) {
+            throw new Exception("Deadline not found");
+        }
+        deadlineRepository.deleteById(id);
+    }
 
 
     private DeadlineDTO toDTO(Deadline deadline){

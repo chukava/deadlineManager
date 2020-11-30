@@ -8,16 +8,16 @@ public class StudentCreateDTO {
     private String studentUsername;
     private String password;
     private int grade;
-    private List<Deadline> deadlines;
+    private List<Integer> deadlinesId;
 
     public StudentCreateDTO(String studentUsername,
                       String password,
                       int grade,
-                      List<Deadline> deadlines) {
+                            List<Integer> deadlinesId) {
         this.studentUsername = studentUsername;
         this.password = password;
         this.grade = grade;
-        this.deadlines = deadlines;
+        this.deadlinesId = deadlinesId;
     }
 
     public String getStudentUsername() {
@@ -32,7 +32,7 @@ public class StudentCreateDTO {
         return grade;
     }
 
-    public List<Deadline> getDeadlines() {
-        return deadlines;
+    public List<Integer> getDeadlinesId() {
+        return deadlinesId;
     }
 }

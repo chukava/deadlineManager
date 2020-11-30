@@ -10,11 +10,11 @@ public class SubjectCreateDTO {
     private List<Deadline> deadlines;
 
     public SubjectCreateDTO(String subjectCode,
-                            int numberOfCredits,
-                            List<Deadline> deadlines) {
+                            int numberOfCredits){
+                            //List<Deadline> deadlines) {
         this.subjectCode = subjectCode;
         this.numberOfCredits = numberOfCredits;
-        this.deadlines = deadlines;
+        //this.deadlines = deadlines;
     }
 
     public String getSubjectCode() {
@@ -25,7 +25,7 @@ public class SubjectCreateDTO {
         return numberOfCredits;
     }
 
-    public List<Deadline> getDeadlines() {
-        return deadlines;
-    }
+//  //  public List<Deadline> getDeadlines() {
+//        return deadlines;
+//    }
 }

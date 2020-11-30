@@ -12,18 +12,18 @@ public class StudentDTO {
     private String studentUsername;
     private String password;
     private int grade;
-    private List<Deadline> deadlines;
+    private List<Integer> deadlinesId;
 
     public StudentDTO(int studentId,
                       String studentUsername,
                       String password,
                       int grade,
-                      List<Deadline> deadlines) {
+                      List<Integer> deadlinesId) {
         this.studentId = studentId;
         this.studentUsername = studentUsername;
         this.password = password;
         this.grade = grade;
-        this.deadlines = deadlines;
+        this.deadlinesId = deadlinesId;
     }
 
     public int getStudentId() {
@@ -42,7 +42,7 @@ public class StudentDTO {
         return grade;
     }
 
-    public List<Deadline> getDeadlines() {
-        return deadlines;
+    public List<Integer> getDeadlinesId() {
+        return deadlinesId;
     }
 }
