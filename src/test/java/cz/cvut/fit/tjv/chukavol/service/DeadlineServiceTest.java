@@ -40,9 +40,9 @@ public class DeadlineServiceTest {
 
     @Test
     void findAll() {
-        Student student1 = new Student("chukavol", "iLoveCoding1", 1, null);
-        Student student2 = new Student("chukavol2", "iLoveCoding2", 2, null);
-        Student student3 = new Student("chukavol3", "iLoveCoding3", 3, null);
+        Student student1 = new Student("chukavol", "iLoveCoding1", 1);
+        Student student2 = new Student("chukavol2", "iLoveCoding2", 2);
+        Student student3 = new Student("chukavol3", "iLoveCoding3", 3);
 
         ReflectionTestUtils.setField(student1, "studentId", 31);
         ReflectionTestUtils.setField(student2, "studentId", 32);
@@ -106,8 +106,8 @@ public class DeadlineServiceTest {
 
     @Test
     void findById() {
-        Student student1 = new Student("chukavol", "iLoveCoding1", 1, null);
-        Student student2 = new Student("chukavol2", "iLoveCoding2", 2, null);
+        Student student1 = new Student("chukavol", "iLoveCoding1", 1);
+        Student student2 = new Student("chukavol2", "iLoveCoding2", 2);
         ReflectionTestUtils.setField(student1, "studentId", 31);
         ReflectionTestUtils.setField(student2, "studentId", 32);
         List<Student> studentToReturn1 = Arrays.asList(student1, student2);
@@ -140,8 +140,8 @@ public class DeadlineServiceTest {
 
     @Test
     void findByIdAsDTO(){
-        Student student1 = new Student("chukavol", "iLoveCoding1", 1, null);
-        Student student2 = new Student("chukavol2", "iLoveCoding2", 2, null);
+        Student student1 = new Student("chukavol", "iLoveCoding1", 1);
+        Student student2 = new Student("chukavol2", "iLoveCoding2", 2);
         ReflectionTestUtils.setField(student1, "studentId", 31);
         ReflectionTestUtils.setField(student2, "studentId", 32);
         List<Student> studentToReturn1 = Arrays.asList(student1, student2);
@@ -177,8 +177,8 @@ public class DeadlineServiceTest {
     @Test
     void create() throws Exception {
         //creating  deadlineToReturn that should be returned for ANY integer passed to save
-        Student student1 = new Student("chukavol", "iLoveCoding1", 1, null);
-        Student student2 = new Student("chukavol2", "iLoveCoding2", 2, null);
+        Student student1 = new Student("chukavol", "iLoveCoding1", 1);
+        Student student2 = new Student("chukavol2", "iLoveCoding2", 2);
         ReflectionTestUtils.setField(student1, "studentId", 31);
         ReflectionTestUtils.setField(student2, "studentId", 32);
         List<Student> studentToReturn1 = Arrays.asList(student1, student2);
@@ -214,8 +214,8 @@ public class DeadlineServiceTest {
     @Test
     void update() throws Exception {
         //creating  deadlineToReturn that should be returned for ANY integer passed to save
-        Student student1 = new Student("chukavol", "iLoveCoding1", 1, null);
-        Student student2 = new Student("chukavol2", "iLoveCoding2", 2, null);
+        Student student1 = new Student("chukavol", "iLoveCoding1", 1);
+        Student student2 = new Student("chukavol2", "iLoveCoding2", 2);
         ReflectionTestUtils.setField(student1, "studentId", 31);
         ReflectionTestUtils.setField(student2, "studentId", 32);
         List<Student> studentToReturn1 = Arrays.asList(student1, student2);

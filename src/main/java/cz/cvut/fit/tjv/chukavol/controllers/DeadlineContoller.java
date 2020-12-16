@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/deadline")
 public class DeadlineContoller {
     private final DeadlineService deadlineService;
 
@@ -18,28 +19,27 @@ public class DeadlineContoller {
         this.deadlineService = deadlineService;
     }
 
-    @GetMapping("/deadline/{id}")
+    @GetMapping("/{id}")
     DeadlineDTO byId(@PathVariable int id) {
         return deadlineService.findByIdAsDTO(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/deadline/all")
+    @GetMapping("/all")
     List<DeadlineDTO> all() {
         return deadlineService.findAll();
     }
 
-
-    @PostMapping("/deadline")
-    DeadlineDTO save(@RequestBody DeadlineCreateDTO deadline) throws Exception {
+    @PostMapping("/create")
+    DeadlineDTO create(@RequestBody DeadlineCreateDTO deadline) throws Exception {
         return deadlineService.create(deadline);
     }
 
-    @PutMapping
+    @PutMapping("/update/{id}")
     DeadlineDTO save(@PathVariable int id, @RequestBody DeadlineCreateDTO deadline) throws Exception {
         return deadlineService.update(id,deadline);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable int id) throws Exception {
         deadlineService.deleteById(id);
         return ResponseEntity.ok("Deleted");

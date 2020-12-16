@@ -84,21 +84,11 @@ public class StudentService {
 
 
     private StudentDTO toDTO(Student student){
-        if(student.getDeadlines() == null){
-            return new StudentDTO(
-                    student.getStudentId(),
-                    student.getStudentUsername(),
-                    student.getPassword(),
-                    student.getGrade(),null);
-        }
         return new StudentDTO(
                 student.getStudentId(),
                 student.getStudentUsername(),
                 student.getPassword(),
-                student.getGrade(),
-                student.getDeadlines().stream().
-                        map(Deadline::getDeadlineId)
-                        .collect(Collectors.toList()));
+                student.getGrade());
     }
 
     private Optional<StudentDTO> toDTO(Optional<Student> optionalStudent) {

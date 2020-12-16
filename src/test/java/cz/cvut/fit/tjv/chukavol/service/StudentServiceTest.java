@@ -3,7 +3,6 @@ package cz.cvut.fit.tjv.chukavol.service;
 import cz.cvut.fit.tjv.chukavol.dto.StudentCreateDTO;
 import cz.cvut.fit.tjv.chukavol.dto.StudentDTO;
 import cz.cvut.fit.tjv.chukavol.entity.Student;
-import cz.cvut.fit.tjv.chukavol.entity.Subject;
 import cz.cvut.fit.tjv.chukavol.repository.StudentRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,9 +32,9 @@ public class StudentServiceTest {
 
     @Test
     void findAll(){
-        Student student1 = new Student("chukavol","iLoveCoding1",1,null);
-        Student student2 = new Student("chukavol2","iLoveCoding2",2, null);
-        Student student3 = new Student("chukavol3","iLoveCoding3",3, null);
+        Student student1 = new Student("chukavol","iLoveCoding1",1);
+        Student student2 = new Student("chukavol2","iLoveCoding2",2);
+        Student student3 = new Student("chukavol3","iLoveCoding3",3);
 
         ReflectionTestUtils.setField(student1, "studentId", 31);
         ReflectionTestUtils.setField(student2, "studentId", 32);
@@ -64,9 +63,9 @@ public class StudentServiceTest {
 
     @Test
     void findAllByIds(){
-        Student student1 = new Student("chukavol","iLoveCoding1",1,null);
-        Student student2 = new Student("chukavol2","iLoveCoding2",2, null);
-        Student student3 = new Student("chukavol3","iLoveCoding3",3, null);
+        Student student1 = new Student("chukavol","iLoveCoding1",1);
+        Student student2 = new Student("chukavol2","iLoveCoding2",2);
+        Student student3 = new Student("chukavol3","iLoveCoding3",3);
 
         ReflectionTestUtils.setField(student1, "studentId", 31);
         ReflectionTestUtils.setField(student2, "studentId", 32);
@@ -82,22 +81,19 @@ public class StudentServiceTest {
         Assertions.assertEquals(returnedStudent.get(0).getStudentUsername(), "chukavol");
         Assertions.assertEquals(returnedStudent.get(0).getPassword(), "iLoveCoding1");
         Assertions.assertEquals(returnedStudent.get(0).getGrade(), 1);
-        Assertions.assertEquals(returnedStudent.get(0).getDeadlines(), null);
         Assertions.assertEquals(returnedStudent.get(1).getStudentId(), 32);
         Assertions.assertEquals(returnedStudent.get(1).getStudentUsername(), "chukavol2");
         Assertions.assertEquals(returnedStudent.get(1).getPassword(), "iLoveCoding2");
         Assertions.assertEquals(returnedStudent.get(1).getGrade(), 2);
-        Assertions.assertEquals(returnedStudent.get(1).getDeadlines(), null);
         Assertions.assertEquals(returnedStudent.get(2).getStudentId(), 33);
         Assertions.assertEquals(returnedStudent.get(2).getStudentUsername(), "chukavol3");
         Assertions.assertEquals(returnedStudent.get(2).getPassword(), "iLoveCoding3");
         Assertions.assertEquals(returnedStudent.get(2).getGrade(), 3);
-        Assertions.assertEquals(returnedStudent.get(2).getDeadlines(), null);
     }
 
     @Test
     void findById(){
-        Student studentToReturn = new Student("chukavol","iLoveCoding1",1,null);
+        Student studentToReturn = new Student("chukavol","iLoveCoding1",1);
         ReflectionTestUtils.setField(studentToReturn, "studentId", 31);
 
         BDDMockito.given(studentRepositoryMock.findById(Mockito.any(Integer.class)))
@@ -109,7 +105,6 @@ public class StudentServiceTest {
         Assertions.assertEquals(returnedStudent.getStudentUsername(), "chukavol");
         Assertions.assertEquals(returnedStudent.getPassword(), "iLoveCoding1");
         Assertions.assertEquals(returnedStudent.getGrade(), 1);
-        Assertions.assertEquals(returnedStudent.getDeadlines(), null);
 
         ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
         Mockito.verify(studentRepositoryMock, Mockito.atLeastOnce()).findById(argumentCaptor.capture());
@@ -119,7 +114,7 @@ public class StudentServiceTest {
 
     @Test
     void findByIdAsDTO() {
-        Student studentToReturn = new Student("chukavol", "iLoveCoding1", 1, null);
+        Student studentToReturn = new Student("chukavol", "iLoveCoding1", 1);
         ReflectionTestUtils.setField(studentToReturn, "studentId", 31);
 
         BDDMockito.given(studentRepositoryMock.findById(Mockito.any(Integer.class)))
@@ -131,7 +126,6 @@ public class StudentServiceTest {
         Assertions.assertEquals(returnedStudent.getStudentUsername(), "chukavol");
         Assertions.assertEquals(returnedStudent.getPassword(), "iLoveCoding1");
         Assertions.assertEquals(returnedStudent.getGrade(), 1);
-        Assertions.assertEquals(returnedStudent.getDeadlinesId(), null);
 
         ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
         Mockito.verify(studentRepositoryMock, Mockito.atLeastOnce()).findById(argumentCaptor.capture());
@@ -141,9 +135,9 @@ public class StudentServiceTest {
 
     @Test
     void create(){
-        Student studentToReturn = new Student("chukavol", "iLoveCoding1", 1, null);
+        Student studentToReturn = new Student("chukavol", "iLoveCoding1", 1);
         ReflectionTestUtils.setField(studentToReturn, "studentId", 31);
-        StudentCreateDTO studentCreateDTO = new StudentCreateDTO("chukavol", "iLoveCoding1", 1, null);
+        StudentCreateDTO studentCreateDTO = new StudentCreateDTO("chukavol", "iLoveCoding1", 1);
 
         BDDMockito.given(studentRepositoryMock.save(any(Student.class))).willReturn(studentToReturn);
 
@@ -153,7 +147,6 @@ public class StudentServiceTest {
         Assertions.assertEquals(returnedStudentDTO.getStudentUsername(), "chukavol");
         Assertions.assertEquals(returnedStudentDTO.getPassword(), "iLoveCoding1");
         Assertions.assertEquals(returnedStudentDTO.getGrade(), 1);
-        Assertions.assertEquals(returnedStudentDTO.getDeadlinesId(), null);
 
         ArgumentCaptor<Student> argumentCaptor = ArgumentCaptor.forClass(Student.class);
         Mockito.verify(studentRepositoryMock, Mockito.atLeastOnce()).save(argumentCaptor.capture());
@@ -161,14 +154,13 @@ public class StudentServiceTest {
         assertEquals("chukavol", subjectProvidedToSave.getStudentUsername());
         assertEquals("iLoveCoding1", subjectProvidedToSave.getPassword());
         assertEquals(1, subjectProvidedToSave.getGrade());
-        assertEquals(null, subjectProvidedToSave.getDeadlines());
     }
 
     @Test
     void update(){
-        Student studentToReturn = new Student("chukavol", "iLoveCoding1", 1, null);
+        Student studentToReturn = new Student("chukavol", "iLoveCoding1", 1);
         ReflectionTestUtils.setField(studentToReturn, "studentId", 31);
-        StudentCreateDTO studentCreateDTO = new StudentCreateDTO("chukavol", "iLoveCoding1", 1, null);
+        StudentCreateDTO studentCreateDTO = new StudentCreateDTO("chukavol", "iLoveCoding1", 1);
 
         BDDMockito.given(studentRepositoryMock.save(any(Student.class))).willReturn(studentToReturn);
         BDDMockito.given(studentRepositoryMock.existsById(31)).willReturn(true);
@@ -181,13 +173,12 @@ public class StudentServiceTest {
         Assertions.assertEquals(returnedStudentDTO.getStudentUsername(), "chukavol");
         Assertions.assertEquals(returnedStudentDTO.getPassword(), "iLoveCoding1");
         Assertions.assertEquals(returnedStudentDTO.getGrade(), 1);
-        Assertions.assertEquals(returnedStudentDTO.getDeadlinesId(), null);
     }
 
     @Test
     void deleteById() throws Exception {
 
-        Student studentToReturn = new Student("chukavol", "iLoveCoding1", 1, null);
+        Student studentToReturn = new Student("chukavol", "iLoveCoding1",1);
         ReflectionTestUtils.setField(studentToReturn, "studentId", 31);
 
         BDDMockito.given(studentRepositoryMock.existsById(31)).willReturn(true);

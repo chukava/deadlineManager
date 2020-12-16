@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/student")
 public class StudentContoller {
     private final StudentService studentService;
 
@@ -19,33 +20,33 @@ public class StudentContoller {
         this.studentService = studentService;
     }
 
-    @GetMapping(value = "/student/{id}")
+    @GetMapping(value = "/{id}")
     StudentDTO byId(@PathVariable int id) {
         System.out.println(id);
         return studentService.findByIdAsDTO(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(value = "/student/all")
+    @GetMapping(value = "/all")
     List<StudentDTO> all(){
         return studentService.findAll();
     }
 
-    @GetMapping(value = "/student/all/{subjectId}")
+    @GetMapping(value = "/all/{subjectId}")
     List<StudentDTO> allBySubjectId(@PathVariable int subjectId){
         return studentService.findAllStudentsBySubjectId(subjectId);
     }
 
-    @PostMapping("/student")
-    StudentDTO save(@RequestBody StudentCreateDTO student){
+    @PostMapping("/create")
+    StudentDTO create(@RequestBody StudentCreateDTO student){
         return studentService.create(student);
     }
 
-    @PutMapping("/student/{id}")
-    StudentDTO save(@PathVariable int id, @RequestBody StudentCreateDTO student) throws Exception {
+    @PutMapping("/update/{id}")
+    StudentDTO update(@PathVariable int id, @RequestBody StudentCreateDTO student) throws Exception {
         return studentService.update(id,student);
     }
 
-    @DeleteMapping("/student/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable int id) throws Exception {
         studentService.deleteById(id);
         return ResponseEntity.ok("Deleted");

@@ -25,17 +25,7 @@ public class Student {
     private int grade;
 
 
-    @ManyToMany(mappedBy = "students")
-    private List<Deadline> deadlines;
-
     public Student() {
-    }
-
-    public Student(String studentUsername, String password, int grade, List<Deadline> deadlines) {
-        this.studentUsername = studentUsername;
-        this.password = password;
-        this.grade = grade;
-        this.deadlines = deadlines;
     }
 
     public Student(String studentUsername, String password, int grade) {
@@ -70,13 +60,5 @@ public class Student {
 
     public void setGrade(int grade) {
         this.grade = grade;
-    }
-
-    public List<Deadline> getDeadlines() {
-        return deadlines;
-    }
-
-    public void setDeadlines(List<Deadline> deadlines) {
-        this.deadlines = deadlines;
     }
 }

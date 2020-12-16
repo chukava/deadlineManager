@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/subject")
 public class SubjectContoller {
     private final SubjectService subjectService;
 
@@ -18,27 +19,27 @@ public class SubjectContoller {
         this.subjectService = subjectService;
     }
 
-    @GetMapping("/subject/{id}")
+    @GetMapping("/{id}")
     SubjectDTO byId(@PathVariable int id) {
         return subjectService.findByIdAsDTO(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/subject/all")
+    @GetMapping("/all")
     List<SubjectDTO> all() {
         return subjectService.findAll();
     }
 
-    @PostMapping("/subject")
-    SubjectDTO save(@RequestBody SubjectCreateDTO subject) {
+    @PostMapping("/create")
+    SubjectDTO create(@RequestBody SubjectCreateDTO subject) {
         return subjectService.create(subject);
     }
 
-    @PutMapping("/subject/{id}")
-    SubjectDTO save(@PathVariable int id, @RequestBody SubjectCreateDTO subject) throws Exception {
+    @PutMapping("/update/{id}")
+    SubjectDTO update(@PathVariable int id, @RequestBody SubjectCreateDTO subject) throws Exception {
         return subjectService.update(id,subject);
     }
 
-    @DeleteMapping("/subject/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable int id) throws Exception {
         subjectService.deleteById(id);
         return ResponseEntity.ok("Deleted");
