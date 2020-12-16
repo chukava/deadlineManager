@@ -30,6 +30,11 @@ public class StudentContoller {
         return studentService.findAll();
     }
 
+    @GetMapping(value = "/student/all/{subjectId}")
+    List<StudentDTO> allBySubjectId(@PathVariable int subjectId){
+        return studentService.findAllStudentsBySubjectId(subjectId);
+    }
+
     @PostMapping("/student")
     StudentDTO save(@RequestBody StudentCreateDTO student){
         return studentService.create(student);

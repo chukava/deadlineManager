@@ -45,6 +45,13 @@ public class StudentService {
         return toDTO(findById(id));
     }
 
+    public List<StudentDTO> findAllStudentsBySubjectId(int subjectId){
+        return studentRepository.findAllBySubjectId(subjectId)
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
 
     public StudentDTO create(StudentCreateDTO studentCreateDTO){
         return toDTO(studentRepository.save(

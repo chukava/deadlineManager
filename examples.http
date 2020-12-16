@@ -36,3 +36,10 @@ Cache-Control: no-cache
 Content-Type: application/json
 
 {"subjectCode": "BI-PJV", "numberOfCredits": 4}
+
+###
+
+GET http://localhost:8080/student/all/9
+Cache-Control: no-cache
+Content-Type: application/json
+
