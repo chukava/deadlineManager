@@ -4,20 +4,20 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/subject/all
+GET http://localhost:8080/subject/all?page=0&size=3
 Cache-Control: no-cache
 Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/subject/create
+POST http://localhost:8080/subject
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json
 
 {
-  "subjectCode": "BI-PPA66",
-  "numberOfCredits": 5
+  "subjectCode": "BI-XZZ",
+  "numberOfCredits": 4
 }
 
 ###

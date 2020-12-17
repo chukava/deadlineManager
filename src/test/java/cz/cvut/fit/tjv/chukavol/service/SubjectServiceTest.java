@@ -4,6 +4,7 @@ import cz.cvut.fit.tjv.chukavol.dto.SubjectCreateDTO;
 import cz.cvut.fit.tjv.chukavol.dto.SubjectDTO;
 import cz.cvut.fit.tjv.chukavol.entity.Subject;
 import cz.cvut.fit.tjv.chukavol.repository.SubjectRepository;
+import cz.cvut.fit.tjv.chukavol.service.exception.ExistingEntityException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,6 +13,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Arrays;
@@ -42,9 +47,14 @@ public class SubjectServiceTest {
         ReflectionTestUtils.setField(subject2, "subjectId", 32);
         ReflectionTestUtils.setField(subject3, "subjectId", 33);
 
-        List<Subject> subjectToReturn = Arrays.asList(subject1,subject2,subject3);
-        BDDMockito.given(subjectRepositoryMock.findAll()).willReturn(subjectToReturn);
-        List<SubjectDTO> returnedSubjects = subjectService.findAll();
+        Pageable pageable = PageRequest.of(0,3);
+
+        List<Subject> subjectToReturn1 = Arrays.asList(subject1,subject2,subject3);
+        Page<Subject> subjectToReturn = new PageImpl<>(subjectToReturn1);
+
+        BDDMockito.given(subjectRepositoryMock.findAll(pageable)).willReturn(subjectToReturn);
+
+        List<SubjectDTO> returnedSubjects = subjectService.findAll(PageRequest.of(0,3));
 
         Assertions.assertEquals(returnedSubjects.get(0).getSubjectId(), 31);
         Assertions.assertEquals(returnedSubjects.get(0).getSubjectCode(), "BI-AG1");
@@ -56,7 +66,7 @@ public class SubjectServiceTest {
         Assertions.assertEquals(returnedSubjects.get(2).getSubjectCode(), "BI-LIN");
         Assertions.assertEquals(returnedSubjects.get(2).getNumberOfCredits(), 7);
 
-        Mockito.verify(subjectRepositoryMock, Mockito.atLeastOnce()).findAll();
+        Mockito.verify(subjectRepositoryMock, Mockito.atLeastOnce()).findAll(pageable);
     }
 
     @Test
@@ -101,7 +111,7 @@ public class SubjectServiceTest {
 
 
     @Test
-    void create(){
+    void create() throws ExistingEntityException {
         Subject subjectToReturn = new Subject("BI-AG1",6);
 
         // Setting id even without setter or constructor

@@ -11,10 +11,8 @@ public class SubjectCreateDTO {
 
     public SubjectCreateDTO(String subjectCode,
                             int numberOfCredits){
-                            //List<Deadline> deadlines) {
         this.subjectCode = subjectCode;
         this.numberOfCredits = numberOfCredits;
-        //this.deadlines = deadlines;
     }
 
     public String getSubjectCode() {
@@ -24,8 +22,4 @@ public class SubjectCreateDTO {
     public int getNumberOfCredits() {
         return numberOfCredits;
     }
-
-//  //  public List<Deadline> getDeadlines() {
-//        return deadlines;
-//    }
 }

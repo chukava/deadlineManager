@@ -1,13 +1,8 @@
 package cz.cvut.fit.tjv.chukavol.entity;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.List;
+import javax.persistence.*;
+
 
 @Entity
 public class Subject {
@@ -17,15 +12,11 @@ public class Subject {
     private int subjectId;
 
     @NotNull
+    @Column(unique = true)
     private  String subjectCode;
 
     @NotNull
     private int numberOfCredits;
-
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "subject")
-//    private List<Deadline> deadlines;
-
 
     public Subject() {
     }

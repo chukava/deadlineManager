@@ -22,7 +22,7 @@ Cache-Control: no-cache
 Content-Type: application/json
 
 {
-  "studentUsername": "Olia6",
+  "studentUsername": "Olia7",
   "password": "helloworld3",
   "grade" : 3
 }

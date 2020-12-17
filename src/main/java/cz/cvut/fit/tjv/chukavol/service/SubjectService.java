@@ -4,6 +4,10 @@ import cz.cvut.fit.tjv.chukavol.dto.SubjectCreateDTO;
 import cz.cvut.fit.tjv.chukavol.dto.SubjectDTO;
 import cz.cvut.fit.tjv.chukavol.entity.Subject;
 import cz.cvut.fit.tjv.chukavol.repository.SubjectRepository;
+import cz.cvut.fit.tjv.chukavol.service.exception.ExistingEntityException;
+import cz.cvut.fit.tjv.chukavol.service.exception.NonExistingEntityException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +26,9 @@ public class SubjectService {
         this.subjectRepository = subjectRepository;
     }
 
-    public List<SubjectDTO> findAll() {
+    public List<SubjectDTO> findAll(Pageable pageable) {
         return subjectRepository
-                .findAll()
+                .findAll(pageable)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
@@ -38,17 +42,26 @@ public class SubjectService {
         return toDTO(findById(id));
     }
 
-    public SubjectDTO create(SubjectCreateDTO subjectCreateDTO){ //done
+
+    public SubjectDTO create(SubjectCreateDTO subjectCreateDTO) throws ExistingEntityException {
+        Optional<Subject> subject = subjectRepository.existsBySubjectCode(subjectCreateDTO.getSubjectCode());
+        if(!subject.isEmpty()){
+            throw new ExistingEntityException();
+        }
         return toDTO(subjectRepository.save(
                 new Subject(subjectCreateDTO.getSubjectCode(),
                         subjectCreateDTO.getNumberOfCredits())));
     }
 
     @Transactional
-    public SubjectDTO update(int id, SubjectCreateDTO subjectCreateDTO) throws Exception {
+    public SubjectDTO update(int id, SubjectCreateDTO subjectCreateDTO) throws NonExistingEntityException, ExistingEntityException {
         Optional<Subject> optionalSubject = subjectRepository.findById((id));
         if (optionalSubject.isEmpty()) {
-            throw new Exception("no such subject");
+            throw new NonExistingEntityException();
+        }
+        Optional<Subject> optionalSubject2 = subjectRepository.existsBySubjectCode(subjectCreateDTO.getSubjectCode());
+        if(!optionalSubject2.isEmpty()){
+            throw new ExistingEntityException();
         }
         Subject subject = optionalSubject.get();
         subject.setSubjectCode(subjectCreateDTO.getSubjectCode());
@@ -56,9 +69,9 @@ public class SubjectService {
         return toDTO(subject);
     }
 
-    public void deleteById(int id) throws Exception {
+    public void deleteById(int id) throws NonExistingEntityException {
         if (!subjectRepository.existsById(id)) {
-            throw new Exception("no such subject");
+            throw new NonExistingEntityException();
         }
         subjectRepository.deleteById(id);
     }
