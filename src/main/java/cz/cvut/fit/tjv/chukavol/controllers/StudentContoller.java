@@ -25,7 +25,13 @@ public class StudentContoller {
 
     @GetMapping(value = "/{id}")
     public StudentDTO byId(@PathVariable int id) {
-        return studentService.findByIdAsDTO(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        try{
+            StudentDTO studentDTO =  studentService.findByIdAsDTO(id);
+            return studentDTO;
+        }
+        catch (NonExistingEntityException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping(value = "/all")
@@ -44,7 +50,7 @@ public class StudentContoller {
         try {
             StudentDTO created = studentService.create(student);
             return ResponseEntity
-                    .created(Link.of("http://localhost:8080/orders/" + created.getStudentId()).toUri())
+                    .created(Link.of("http://localhost:8080/student/" + created.getStudentId()).toUri())
                     .body(created);
         }
         catch (ExistingEntityException e){

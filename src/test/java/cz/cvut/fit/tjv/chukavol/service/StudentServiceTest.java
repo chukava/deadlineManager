@@ -6,6 +6,7 @@ import cz.cvut.fit.tjv.chukavol.entity.Student;
 import cz.cvut.fit.tjv.chukavol.entity.Subject;
 import cz.cvut.fit.tjv.chukavol.repository.StudentRepository;
 import cz.cvut.fit.tjv.chukavol.service.exception.ExistingEntityException;
+import cz.cvut.fit.tjv.chukavol.service.exception.NonExistingEntityException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -123,14 +124,14 @@ public class StudentServiceTest {
     }
 
     @Test
-    void findByIdAsDTO() {
+    void findByIdAsDTO() throws NonExistingEntityException {
         Student studentToReturn = new Student("chukavol", "iLoveCoding1", 1);
         ReflectionTestUtils.setField(studentToReturn, "studentId", 31);
 
         BDDMockito.given(studentRepositoryMock.findById(Mockito.any(Integer.class)))
                 .willReturn(Optional.of(studentToReturn));
 
-        StudentDTO returnedStudent = studentService.findByIdAsDTO(31).get();
+        StudentDTO returnedStudent = studentService.findByIdAsDTO(31);
 
         Assertions.assertEquals(returnedStudent.getStudentId(), 31);
         Assertions.assertEquals(returnedStudent.getStudentUsername(), "chukavol");

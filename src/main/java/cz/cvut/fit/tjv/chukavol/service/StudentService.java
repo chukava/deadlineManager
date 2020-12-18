@@ -43,8 +43,12 @@ public class StudentService {
         return studentRepository.findById(id);
     }
 
-    public Optional<StudentDTO> findByIdAsDTO(int id) {
-        return toDTO(findById(id));
+    public StudentDTO findByIdAsDTO(int id) throws NonExistingEntityException {
+        Optional<StudentDTO> studentDTO = toDTO(findById(id));
+        if(studentDTO.isEmpty()){
+            throw new NonExistingEntityException();
+        }
+        return studentDTO.get();
     }
 
     public List<StudentDTO> findAllStudentsBySubjectId(int subjectId){
@@ -74,14 +78,15 @@ public class StudentService {
             throw new NonExistingEntityException();
         }
         Optional<Student> studentOptional2 = studentRepository.existsByStudentUsername(studentCreateDTO.getStudentUsername());
-        if(!studentOptional2.isEmpty()){
+        if(!studentOptional2.isEmpty() &&
+                studentOptional2.get().getStudentUsername() != studentOptional.get().getStudentUsername()){
             throw new ExistingEntityException();
         }
 
         Student student = studentOptional.get();
         student.setStudentUsername(studentCreateDTO.getStudentUsername());
         student.setPassword(studentCreateDTO.getPassword());
-        student.setPassword(studentCreateDTO.getPassword());
+        student.setGrade(studentCreateDTO.getGrade());
         return toDTO(student);
     }
 
