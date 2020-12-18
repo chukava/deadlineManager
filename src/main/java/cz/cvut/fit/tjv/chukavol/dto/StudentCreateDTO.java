@@ -1,8 +1,5 @@
 package cz.cvut.fit.tjv.chukavol.dto;
 
-import cz.cvut.fit.tjv.chukavol.entity.Deadline;
-
-import java.util.List;
 
 public class StudentCreateDTO {
     private String studentUsername;
