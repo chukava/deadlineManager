@@ -145,6 +145,41 @@ public class StudentServiceTest {
     }
 
     @Test
+    void findAllStudentsBySubjectId(){
+        Student student1 = new Student("chukavol","iLoveCoding1",1);
+        Student student2 = new Student("chukavol2","iLoveCoding2",2);
+        Student student3 = new Student("chukavol3","iLoveCoding3",3);
+
+        ReflectionTestUtils.setField(student1, "studentId", 31);
+        ReflectionTestUtils.setField(student2, "studentId", 32);
+        ReflectionTestUtils.setField(student3, "studentId", 33);
+
+        Subject subject1 = new Subject("BI-AG1",6);
+        ReflectionTestUtils.setField(subject1, "subjectId", 8);
+
+        List<Student> studentToReturn = Arrays.asList(student1,student2,student3);
+
+        BDDMockito.given(studentRepositoryMock.findAllBySubjectId(8)).willReturn(studentToReturn);
+        List<StudentDTO> returnedStudent = studentService.findAllStudentsBySubjectId(8);
+
+
+        Assertions.assertEquals(returnedStudent.get(0).getStudentId(), 31);
+        Assertions.assertEquals(returnedStudent.get(0).getStudentUsername(), "chukavol");
+        Assertions.assertEquals(returnedStudent.get(0).getPassword(), "iLoveCoding1");
+        Assertions.assertEquals(returnedStudent.get(0).getGrade(), 1);
+        Assertions.assertEquals(returnedStudent.get(1).getStudentId(), 32);
+        Assertions.assertEquals(returnedStudent.get(1).getStudentUsername(), "chukavol2");
+        Assertions.assertEquals(returnedStudent.get(1).getPassword(), "iLoveCoding2");
+        Assertions.assertEquals(returnedStudent.get(1).getGrade(), 2);
+        Assertions.assertEquals(returnedStudent.get(2).getStudentId(), 33);
+        Assertions.assertEquals(returnedStudent.get(2).getStudentUsername(), "chukavol3");
+        Assertions.assertEquals(returnedStudent.get(2).getPassword(), "iLoveCoding3");
+        Assertions.assertEquals(returnedStudent.get(2).getGrade(), 3);
+
+        Mockito.verify(studentRepositoryMock, Mockito.atLeastOnce()).findAllBySubjectId(8);
+    }
+
+    @Test
     void create() throws ExistingEntityException {
         Student studentToReturn = new Student("chukavol", "iLoveCoding1", 1);
         ReflectionTestUtils.setField(studentToReturn, "studentId", 31);

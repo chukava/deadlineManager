@@ -37,7 +37,7 @@ public class SubjectService {
         return toDTO(findById(id));
     }
 
-
+    @Transactional
     public SubjectDTO create(SubjectCreateDTO subjectCreateDTO) throws ExistingEntityException {
         Optional<Subject> subject = subjectRepository.existsBySubjectCode(subjectCreateDTO.getSubjectCode());
         if(!subject.isEmpty()){
@@ -55,7 +55,8 @@ public class SubjectService {
             throw new NonExistingEntityException();
         }
         Optional<Subject> optionalSubject2 = subjectRepository.existsBySubjectCode(subjectCreateDTO.getSubjectCode());
-        if(!optionalSubject2.isEmpty()){
+        if(!optionalSubject2.isEmpty() &&
+                optionalSubject2.get().getSubjectCode() != optionalSubject.get().getSubjectCode() ){
             throw new ExistingEntityException();
         }
         Subject subject = optionalSubject.get();

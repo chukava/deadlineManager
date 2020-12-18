@@ -58,7 +58,7 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
-
+    @Transactional
     public StudentDTO create(StudentCreateDTO studentCreateDTO) throws ExistingEntityException {
         Optional<Student> studentOptional = studentRepository.existsByStudentUsername(studentCreateDTO.getStudentUsername());
         if(!studentOptional.isEmpty()){
