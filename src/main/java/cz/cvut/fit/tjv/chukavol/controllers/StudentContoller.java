@@ -1,9 +1,12 @@
 package cz.cvut.fit.tjv.chukavol.controllers;
 
-
 import cz.cvut.fit.tjv.chukavol.dto.StudentCreateDTO;
 import cz.cvut.fit.tjv.chukavol.dto.StudentDTO;
 import cz.cvut.fit.tjv.chukavol.service.StudentService;
+import cz.cvut.fit.tjv.chukavol.service.exception.ExistingEntityException;
+import cz.cvut.fit.tjv.chukavol.service.exception.NonExistingEntityException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,35 +24,55 @@ public class StudentContoller {
     }
 
     @GetMapping(value = "/{id}")
-    StudentDTO byId(@PathVariable int id) {
-        System.out.println(id);
+    public StudentDTO byId(@PathVariable int id) {
         return studentService.findByIdAsDTO(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping(value = "/all")
-    List<StudentDTO> all(){
-        return studentService.findAll();
+    public List<StudentDTO> all(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "2") int size){
+        return studentService.findAll(PageRequest.of(page, size));
     }
 
     @GetMapping(value = "/all/{subjectId}")
-    List<StudentDTO> allBySubjectId(@PathVariable int subjectId){
+    public List<StudentDTO> allBySubjectId(@PathVariable int subjectId){
         return studentService.findAllStudentsBySubjectId(subjectId);
     }
 
-    @PostMapping("/create")
-    StudentDTO create(@RequestBody StudentCreateDTO student){
-        return studentService.create(student);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<StudentDTO> create(@RequestBody StudentCreateDTO student){
+        try {
+            StudentDTO created = studentService.create(student);
+            return ResponseEntity
+                    .created(Link.of("http://localhost:8080/orders/" + created.getStudentId()).toUri())
+                    .body(created);
+        }
+        catch (ExistingEntityException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
     }
 
-    @PutMapping("/update/{id}")
-    StudentDTO update(@PathVariable int id, @RequestBody StudentCreateDTO student) throws Exception {
-        return studentService.update(id,student);
+    @PutMapping("/{id}")
+    public void update(@PathVariable int id, @RequestBody StudentCreateDTO student)  {
+        try{
+            studentService.update(id,student);
+        }
+        catch (NonExistingEntityException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        catch (ExistingEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable int id) throws Exception {
-        studentService.deleteById(id);
-        return ResponseEntity.ok("Deleted");
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id){
+        try{
+            studentService.deleteById(id);
+        }
+        catch (NonExistingEntityException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

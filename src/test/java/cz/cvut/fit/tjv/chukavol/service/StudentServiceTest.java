@@ -3,7 +3,9 @@ package cz.cvut.fit.tjv.chukavol.service;
 import cz.cvut.fit.tjv.chukavol.dto.StudentCreateDTO;
 import cz.cvut.fit.tjv.chukavol.dto.StudentDTO;
 import cz.cvut.fit.tjv.chukavol.entity.Student;
+import cz.cvut.fit.tjv.chukavol.entity.Subject;
 import cz.cvut.fit.tjv.chukavol.repository.StudentRepository;
+import cz.cvut.fit.tjv.chukavol.service.exception.ExistingEntityException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,6 +14,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,9 +46,13 @@ public class StudentServiceTest {
         ReflectionTestUtils.setField(student2, "studentId", 32);
         ReflectionTestUtils.setField(student3, "studentId", 33);
 
-        List<Student> studentToReturn = Arrays.asList(student1,student2,student3);
-        BDDMockito.given(studentRepositoryMock.findAll()).willReturn(studentToReturn);
-        List<StudentDTO> returnedStudent = studentService.findAll();
+        Pageable pageable = PageRequest.of(0,3);
+
+        List<Student> studentToReturn1 = Arrays.asList(student1,student2,student3);
+        Page<Student> studentToReturn = new PageImpl<>(studentToReturn1);
+
+        BDDMockito.given(studentRepositoryMock.findAll(pageable)).willReturn(studentToReturn);
+        List<StudentDTO> returnedStudent = studentService.findAll(pageable);
 
 
         Assertions.assertEquals(returnedStudent.get(0).getStudentId(), 31);
@@ -58,7 +68,7 @@ public class StudentServiceTest {
         Assertions.assertEquals(returnedStudent.get(2).getPassword(), "iLoveCoding3");
         Assertions.assertEquals(returnedStudent.get(2).getGrade(), 3);
 
-        Mockito.verify(studentRepositoryMock, Mockito.atLeastOnce()).findAll();
+        Mockito.verify(studentRepositoryMock, Mockito.atLeastOnce()).findAll(pageable);
     }
 
     @Test
@@ -134,7 +144,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    void create(){
+    void create() throws ExistingEntityException {
         Student studentToReturn = new Student("chukavol", "iLoveCoding1", 1);
         ReflectionTestUtils.setField(studentToReturn, "studentId", 31);
         StudentCreateDTO studentCreateDTO = new StudentCreateDTO("chukavol", "iLoveCoding1", 1);
@@ -157,7 +167,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    void update(){
+    void update() throws ExistingEntityException {
         Student studentToReturn = new Student("chukavol", "iLoveCoding1", 1);
         ReflectionTestUtils.setField(studentToReturn, "studentId", 31);
         StudentCreateDTO studentCreateDTO = new StudentCreateDTO("chukavol", "iLoveCoding1", 1);

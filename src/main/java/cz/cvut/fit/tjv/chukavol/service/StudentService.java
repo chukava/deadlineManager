@@ -2,11 +2,13 @@ package cz.cvut.fit.tjv.chukavol.service;
 
 import cz.cvut.fit.tjv.chukavol.dto.StudentCreateDTO;
 import cz.cvut.fit.tjv.chukavol.dto.StudentDTO;
-import cz.cvut.fit.tjv.chukavol.entity.Deadline;
 import cz.cvut.fit.tjv.chukavol.entity.Student;
 import cz.cvut.fit.tjv.chukavol.repository.StudentRepository;
+import cz.cvut.fit.tjv.chukavol.service.exception.ExistingEntityException;
+import cz.cvut.fit.tjv.chukavol.service.exception.NonExistingEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +27,9 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public List<StudentDTO> findAll() {
+    public List<StudentDTO> findAll(Pageable pageable) {
         return studentRepository
-                .findAll()
+                .findAll(pageable)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
@@ -53,7 +55,11 @@ public class StudentService {
     }
 
 
-    public StudentDTO create(StudentCreateDTO studentCreateDTO){
+    public StudentDTO create(StudentCreateDTO studentCreateDTO) throws ExistingEntityException {
+        Optional<Student> studentOptional = studentRepository.existsByStudentUsername(studentCreateDTO.getStudentUsername());
+        if(!studentOptional.isEmpty()){
+            throw new ExistingEntityException();
+        }
         return toDTO(studentRepository.save(
                 new Student(
                         studentCreateDTO.getStudentUsername(),
@@ -62,22 +68,26 @@ public class StudentService {
     }
 
     @Transactional
-    public StudentDTO update(int id, StudentCreateDTO studentCreateDTO) throws Exception {
-        Optional<Student> optionalStudent = studentRepository.findById(id);
-        if (optionalStudent.isEmpty()) {
-            throw new Exception("no such student");
+    public StudentDTO update(int id, StudentCreateDTO studentCreateDTO) throws NonExistingEntityException, ExistingEntityException {
+        Optional<Student> studentOptional = studentRepository.findById(id);
+        if (studentOptional.isEmpty()) {
+            throw new NonExistingEntityException();
+        }
+        Optional<Student> studentOptional2 = studentRepository.existsByStudentUsername(studentCreateDTO.getStudentUsername());
+        if(!studentOptional2.isEmpty()){
+            throw new ExistingEntityException();
         }
 
-        Student student = optionalStudent.get();
+        Student student = studentOptional.get();
         student.setStudentUsername(studentCreateDTO.getStudentUsername());
         student.setPassword(studentCreateDTO.getPassword());
         student.setPassword(studentCreateDTO.getPassword());
         return toDTO(student);
     }
 
-    public void deleteById(int id) throws Exception {
+    public void deleteById(int id) throws NonExistingEntityException {
         if (!studentRepository.existsById(id)) {
-            throw new Exception("no such student");
+            throw new NonExistingEntityException();
         }
         studentRepository.deleteById(id);
     }
