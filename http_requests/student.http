@@ -22,7 +22,7 @@ Cache-Control: no-cache
 Content-Type: application/json
 
 {
-  "studentUsername": "Olia7",
+  "studentUsername": "Olia3",
   "password": "helloworld3",
   "grade" : 3
 }
@@ -35,14 +35,14 @@ Cache-Control: no-cache
 Content-Type: application/json
 
 {
-  "studentUsername": "Oliaaaa",
-  "password": "helloworld2",
+  "studentUsername": "Olia",
+  "password": "helloworld",
   "grade" : 1
 }
 
 ###
 
-DELETE http://localhost:8080/student/delete/25
+DELETE http://localhost:8080/student/delete/30
 Cache-Control: no-cache
 Content-Type: application/json
 

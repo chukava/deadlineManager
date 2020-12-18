@@ -10,18 +10,17 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/deadline/create
+POST http://localhost:8080/deadline/
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json
 
 {
-  "taskDescription": "100 d u",
-  "deadlineDate": "26.11.2020",
-  "maxPoints": 5,
-  "isDone": false,
-  "studentsId" : [25],
-  "subjectId" : 9
+  "taskDescription": "1 d u",
+  "deadlineDate": "26.12.2020",
+  "maxPoints": 6,
+  "studentsId" : [1,2],
+  "subjectId" : 6
 }
 
 ###
@@ -35,7 +34,6 @@ Content-Type: application/json
   "taskDescription": "8 d u",
   "deadlineDate": "26.11.2020",
   "maxPoints": 10,
-  "isDone": true,
   "studentsId" : [2,25],
   "subjectId" : 11
 }

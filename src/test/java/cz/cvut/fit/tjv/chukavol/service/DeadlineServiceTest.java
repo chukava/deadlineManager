@@ -14,6 +14,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Arrays;
@@ -60,18 +64,21 @@ public class DeadlineServiceTest {
         ReflectionTestUtils.setField(subject2, "subjectId", 42);
         ReflectionTestUtils.setField(subject3, "subjectId", 43);
 
-        Deadline deadline1 = new Deadline("d.u.1.", "21.12.2020", 1, false, studentToReturn1, subject1);
-        Deadline deadline2 = new Deadline("d.u.2.", "22.12.2020", 2, true, studentToReturn2, subject2);
-        Deadline deadline3 = new Deadline("d.u.3.", "23.12.2020", 3, false, studentToReturn3, subject3);
+        Deadline deadline1 = new Deadline("d.u.1.", "21.12.2020", 1, studentToReturn1, subject1);
+        Deadline deadline2 = new Deadline("d.u.2.", "22.12.2020", 2,studentToReturn2, subject2);
+        Deadline deadline3 = new Deadline("d.u.3.", "23.12.2020", 3, studentToReturn3, subject3);
 
         ReflectionTestUtils.setField(deadline1, "deadlineId", 51);
         ReflectionTestUtils.setField(deadline2, "deadlineId", 52);
         ReflectionTestUtils.setField(deadline3, "deadlineId", 53);
 
-        List<Deadline> deadlineToReturn = Arrays.asList(deadline1, deadline2, deadline3);
+        Pageable pageable = PageRequest.of(0,3);
 
-        BDDMockito.given(deadlineRepositoryMock.findAll()).willReturn(deadlineToReturn);
-        List<DeadlineDTO> returnedDeadline = deadlineService.findAll();
+        List<Deadline> deadlineToReturn1 = Arrays.asList(deadline1, deadline2, deadline3);
+        Page<Deadline> deadlineToReturn = new PageImpl<>(deadlineToReturn1);
+
+        BDDMockito.given(deadlineRepositoryMock.findAll(pageable)).willReturn(deadlineToReturn);
+        List<DeadlineDTO> returnedDeadline = deadlineService.findAll(pageable);
 
         List<Integer> stId1 = Arrays.asList(31, 32);
         List<Integer> stId2 = Arrays.asList(31, 33);
@@ -81,7 +88,6 @@ public class DeadlineServiceTest {
         Assertions.assertEquals(returnedDeadline.get(0).getTaskDescription(), "d.u.1.");
         Assertions.assertEquals(returnedDeadline.get(0).getDeadlineDate(), "21.12.2020");
         Assertions.assertEquals(returnedDeadline.get(0).getMaxPoints(), 1);
-        Assertions.assertEquals(returnedDeadline.get(0).getIsDone(), false);
         Assertions.assertEquals(returnedDeadline.get(0).getStudentsId(), stId1);
         Assertions.assertEquals(returnedDeadline.get(0).getSubjectId(), 41);
 
@@ -89,7 +95,6 @@ public class DeadlineServiceTest {
         Assertions.assertEquals(returnedDeadline.get(1).getTaskDescription(), "d.u.2.");
         Assertions.assertEquals(returnedDeadline.get(1).getDeadlineDate(), "22.12.2020");
         Assertions.assertEquals(returnedDeadline.get(1).getMaxPoints(), 2);
-        Assertions.assertEquals(returnedDeadline.get(1).getIsDone(), true);
         Assertions.assertEquals(returnedDeadline.get(1).getStudentsId(), stId2);
         Assertions.assertEquals(returnedDeadline.get(1).getSubjectId(), 42);
 
@@ -97,11 +102,10 @@ public class DeadlineServiceTest {
         Assertions.assertEquals(returnedDeadline.get(2).getTaskDescription(), "d.u.3.");
         Assertions.assertEquals(returnedDeadline.get(2).getDeadlineDate(), "23.12.2020");
         Assertions.assertEquals(returnedDeadline.get(2).getMaxPoints(), 3);
-        Assertions.assertEquals(returnedDeadline.get(2).getIsDone(), false);
         Assertions.assertEquals(returnedDeadline.get(2).getStudentsId(), stId3);
         Assertions.assertEquals(returnedDeadline.get(2).getSubjectId(), 43);
 
-        Mockito.verify(deadlineRepositoryMock, Mockito.atLeastOnce()).findAll();
+        Mockito.verify(deadlineRepositoryMock, Mockito.atLeastOnce()).findAll(pageable);
     }
 
     @Test
@@ -115,7 +119,7 @@ public class DeadlineServiceTest {
         Subject subject1 = new Subject("BI-AG1", 6);
         ReflectionTestUtils.setField(subject1, "subjectId", 41);
 
-        Deadline deadlineToReturn = new Deadline("d.u.1.", "21.12.2020", 1, false, studentToReturn1, subject1);
+        Deadline deadlineToReturn = new Deadline("d.u.1.", "21.12.2020", 1,  studentToReturn1, subject1);
         ReflectionTestUtils.setField(deadlineToReturn, "deadlineId", 51);
 
 
@@ -128,7 +132,6 @@ public class DeadlineServiceTest {
         Assertions.assertEquals(returnedDeadline.getTaskDescription(), "d.u.1.");
         Assertions.assertEquals(returnedDeadline.getDeadlineDate(), "21.12.2020");
         Assertions.assertEquals(returnedDeadline.getMaxPoints(), 1);
-        Assertions.assertEquals(returnedDeadline.getIsDone(), false);
         Assertions.assertEquals(returnedDeadline.getStudents(), studentToReturn1);
         Assertions.assertEquals(returnedDeadline.getSubject(), subject1);
 
@@ -149,7 +152,7 @@ public class DeadlineServiceTest {
         Subject subject1 = new Subject("BI-AG1", 6);
         ReflectionTestUtils.setField(subject1, "subjectId", 41);
 
-        Deadline deadlineToReturn = new Deadline("d.u.1.", "21.12.2020", 1, false, studentToReturn1, subject1);
+        Deadline deadlineToReturn = new Deadline("d.u.1.", "21.12.2020", 1,  studentToReturn1, subject1);
         ReflectionTestUtils.setField(deadlineToReturn, "deadlineId", 51);
 
 
@@ -164,7 +167,6 @@ public class DeadlineServiceTest {
         Assertions.assertEquals(returnedDeadline.getTaskDescription(), "d.u.1.");
         Assertions.assertEquals(returnedDeadline.getDeadlineDate(), "21.12.2020");
         Assertions.assertEquals(returnedDeadline.getMaxPoints(), 1);
-        Assertions.assertEquals(returnedDeadline.getIsDone(), false);
         Assertions.assertEquals(returnedDeadline.getStudentsId(), stId1);
         Assertions.assertEquals(returnedDeadline.getSubjectId(), 41);
 
@@ -192,12 +194,12 @@ public class DeadlineServiceTest {
         BDDMockito.given(subjectService.findById(Mockito.any(Integer.class))).willReturn(Optional.of(subject1));
 
 
-        Deadline deadlineToReturn = new Deadline("d.u.1.", "21.12.2020", 1, false, studentToReturn1, subject1);
+        Deadline deadlineToReturn = new Deadline("d.u.1.", "21.12.2020", 1, studentToReturn1, subject1);
         ReflectionTestUtils.setField(deadlineToReturn, "deadlineId", 51);
 
 
         List<Integer> stId1 = Arrays.asList(31,32);
-        DeadlineCreateDTO deadlineCreateDTO = new DeadlineCreateDTO("d.u.1.", "21.12.2020", 1, false, stId1, 41);
+        DeadlineCreateDTO deadlineCreateDTO = new DeadlineCreateDTO("d.u.1.", "21.12.2020", 1,  stId1, 41);
         BDDMockito.given(deadlineRepositoryMock.save(any(Deadline.class))).willReturn(deadlineToReturn);
 
         DeadlineDTO returnedDeadline = deadlineService.create(deadlineCreateDTO);
@@ -206,7 +208,6 @@ public class DeadlineServiceTest {
         Assertions.assertEquals(returnedDeadline.getTaskDescription(), "d.u.1.");
         Assertions.assertEquals(returnedDeadline.getDeadlineDate(), "21.12.2020");
         Assertions.assertEquals(returnedDeadline.getMaxPoints(), 1);
-        Assertions.assertEquals(returnedDeadline.getIsDone(), false);
         Assertions.assertEquals(returnedDeadline.getStudentsId(), stId1);
         Assertions.assertEquals(returnedDeadline.getSubjectId(), 41);
     }
@@ -229,12 +230,12 @@ public class DeadlineServiceTest {
         BDDMockito.given(subjectService.findById(Mockito.any(Integer.class))).willReturn(Optional.of(subject1));
 
 
-        Deadline deadlineToReturn = new Deadline("d.u.1.", "21.12.2020", 1, false, studentToReturn1, subject1);
+        Deadline deadlineToReturn = new Deadline("d.u.1.", "21.12.2020", 1,studentToReturn1, subject1);
         ReflectionTestUtils.setField(deadlineToReturn, "deadlineId", 51);
 
 
         List<Integer> stId1 = Arrays.asList(31,32);
-        DeadlineCreateDTO deadlineCreateDTO = new DeadlineCreateDTO("d.u.1.", "21.12.2020", 1, false, stId1, 41);
+        DeadlineCreateDTO deadlineCreateDTO = new DeadlineCreateDTO("d.u.1.", "21.12.2020", 1, stId1, 41);
 
         BDDMockito.given(deadlineRepositoryMock.save(any(Deadline.class))).willReturn(deadlineToReturn);
         BDDMockito.given(deadlineRepositoryMock.existsById(51)).willReturn(true);
@@ -246,7 +247,6 @@ public class DeadlineServiceTest {
         Assertions.assertEquals(returnedDeadline.getTaskDescription(), "d.u.1.");
         Assertions.assertEquals(returnedDeadline.getDeadlineDate(), "21.12.2020");
         Assertions.assertEquals(returnedDeadline.getMaxPoints(), 1);
-        Assertions.assertEquals(returnedDeadline.getIsDone(), false);
         Assertions.assertEquals(returnedDeadline.getStudentsId(), stId1);
         Assertions.assertEquals(returnedDeadline.getSubjectId(), 41);
 

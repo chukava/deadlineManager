@@ -5,9 +5,9 @@ import cz.cvut.fit.tjv.chukavol.entity.Deadline;
 import cz.cvut.fit.tjv.chukavol.entity.Student;
 import cz.cvut.fit.tjv.chukavol.entity.Subject;
 import cz.cvut.fit.tjv.chukavol.repository.DeadlineRepository;
-import org.springframework.http.HttpStatus;
+import cz.cvut.fit.tjv.chukavol.service.exception.NonExistingEntityException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -25,9 +25,9 @@ public class DeadlineService {
         this.subjectService = subjectService;
     }
 
-    public List<DeadlineDTO> findAll() {
+    public List<DeadlineDTO> findAll(Pageable pageable) {
         return deadlineRepository
-                .findAll()
+                .findAll(pageable)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
@@ -44,19 +44,19 @@ public class DeadlineService {
 
 
     @Transactional
-    public DeadlineDTO create(DeadlineCreateDTO deadlineCreateDTO) throws Exception {
+    public DeadlineDTO create(DeadlineCreateDTO deadlineCreateDTO) throws NonExistingEntityException {
         List<Student> student = studentService.findAllByIds(deadlineCreateDTO.getStudentsId());
         if( student.size() != deadlineCreateDTO.getStudentsId().size() || student.size() == 0) {
-            throw new Exception("some students not found");
+            throw new NonExistingEntityException();
         }
         Subject subject = subjectService.findById(deadlineCreateDTO.getSubjectId())
-                .orElseThrow(() -> new Exception("subject not found"));
+                .orElseThrow(NonExistingEntityException::new);
+
         return toDTO(deadlineRepository.save(
                 new Deadline(
                         deadlineCreateDTO.getTaskDescription(),
                         deadlineCreateDTO.getDeadlineDate(),
                         deadlineCreateDTO.getMaxPoints(),
-                        deadlineCreateDTO.getIsDone(),
                         student,
                         subject)));
     }
@@ -64,31 +64,31 @@ public class DeadlineService {
 
 
     @Transactional
-    public DeadlineDTO update(int id, DeadlineCreateDTO deadlineCreateDTO) throws Exception {
+    public DeadlineDTO update(int id, DeadlineCreateDTO deadlineCreateDTO) throws NonExistingEntityException {
         Optional<Deadline> optionalDeadline = deadlineRepository.findById(id);
         if (optionalDeadline.isEmpty()) {
-            throw new Exception("no such deadline");
+            throw new NonExistingEntityException();
         }
         List<Student> students = studentService.findAllByIds(deadlineCreateDTO.getStudentsId());
         if( students.size() != deadlineCreateDTO.getStudentsId().size() || students.size() == 0 ) {
-            throw new Exception("some students not found");
+            throw new NonExistingEntityException();
         }
         Subject subject = subjectService.findById(deadlineCreateDTO.getSubjectId())
-                .orElseThrow(() -> new Exception("subject not found"));
+                .orElseThrow(NonExistingEntityException::new);
+
         Deadline deadline = optionalDeadline.get();
         deadline.setTaskDescription(deadlineCreateDTO.getTaskDescription());
         deadline.setDeadlineDate(deadlineCreateDTO.getDeadlineDate());
         deadline.setMaxPoints(deadlineCreateDTO.getMaxPoints());
-        deadline.setIsDone(deadlineCreateDTO.getIsDone());
         deadline.setStudents(students);
         deadline.setSubject(subject);
 
         return toDTO(deadline);
     }
 
-    public void deleteById(int id) throws Exception {
+    public void deleteById(int id) throws NonExistingEntityException {
         if (!deadlineRepository.existsById(id)) {
-            throw new Exception("Deadline not found");
+            throw new NonExistingEntityException();
         }
         deadlineRepository.deleteById(id);
     }
@@ -99,7 +99,6 @@ public class DeadlineService {
                 deadline.getTaskDescription(),
                 deadline.getDeadlineDate(),
                 deadline.getMaxPoints(),
-                deadline.getIsDone(),
                 deadline.getStudents().stream()
                 .map(Student::getStudentId)
                 .collect(Collectors.toList()),

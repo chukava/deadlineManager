@@ -3,6 +3,9 @@ package cz.cvut.fit.tjv.chukavol.controllers;
 import cz.cvut.fit.tjv.chukavol.dto.DeadlineCreateDTO;
 import cz.cvut.fit.tjv.chukavol.dto.DeadlineDTO;
 import cz.cvut.fit.tjv.chukavol.service.DeadlineService;
+import cz.cvut.fit.tjv.chukavol.service.exception.NonExistingEntityException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,29 +23,47 @@ public class DeadlineContoller {
     }
 
     @GetMapping("/{id}")
-    DeadlineDTO byId(@PathVariable int id) {
+    public DeadlineDTO byId(@PathVariable int id) {
         return deadlineService.findByIdAsDTO(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/all")
-    List<DeadlineDTO> all() {
-        return deadlineService.findAll();
+    public List<DeadlineDTO> all(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "2") int size) {
+        return deadlineService.findAll(PageRequest.of(page, size));
     }
 
-    @PostMapping("/create")
-    DeadlineDTO create(@RequestBody DeadlineCreateDTO deadline) throws Exception {
-        return deadlineService.create(deadline);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<DeadlineDTO> create(@RequestBody DeadlineCreateDTO newDeadline) {
+        try{
+            DeadlineDTO created = deadlineService.create(newDeadline);
+            return ResponseEntity
+                    .created(Link.of("http://localhost:8080/deadlines/" + created.getDeadlineId()).toUri())
+                    .body(created);
+        }
+        catch (NonExistingEntityException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @PutMapping("/update/{id}")
-    DeadlineDTO save(@PathVariable int id, @RequestBody DeadlineCreateDTO deadline) throws Exception {
-        return deadlineService.update(id,deadline);
+    @PutMapping("/{id}")
+    public void update(@PathVariable int id, @RequestBody DeadlineCreateDTO deadline) {
+        try{
+            deadlineService.update(id, deadline);
+        }
+        catch (NonExistingEntityException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable int id) throws Exception {
-        deadlineService.deleteById(id);
-        return ResponseEntity.ok("Deleted");
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id) {
+        try {
+            deadlineService.deleteById(id);
+        }
+        catch (NonExistingEntityException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

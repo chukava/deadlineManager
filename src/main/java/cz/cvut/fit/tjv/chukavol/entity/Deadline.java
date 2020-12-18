@@ -22,9 +22,6 @@ public class Deadline {
     private int maxPoints;
 
     @NotNull
-    private Boolean isDone;
-
-    @NotNull
     @ManyToMany
     @JoinTable(name = "deadline_student", // name of associative table - table created as decomposed M:N relation
               joinColumns = {@JoinColumn(name = "deadline_id")}, // column name referring to this entity - will become both primary and foreign key
@@ -43,13 +40,11 @@ public class Deadline {
     public Deadline(String taskDescription,
                     String deadlineDate,
                     int maxPoints,
-                    Boolean isDone,
                     List<Student> students,
                     Subject subject) {
         this.taskDescription = taskDescription;
         this.deadlineDate = deadlineDate;
         this.maxPoints = maxPoints;
-        this.isDone = isDone;
         this.students = students;
         this.subject = subject;
     }
@@ -80,14 +75,6 @@ public class Deadline {
 
     public void setMaxPoints(int maxPoints) {
         this.maxPoints = maxPoints;
-    }
-
-    public Boolean getIsDone() {
-        return isDone;
-    }
-
-    public void setIsDone(Boolean done) {
-        isDone = done;
     }
 
     public List<Student> getStudents() {

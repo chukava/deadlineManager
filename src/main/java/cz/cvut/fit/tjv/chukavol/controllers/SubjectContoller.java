@@ -2,11 +2,9 @@ package cz.cvut.fit.tjv.chukavol.controllers;
 
 import cz.cvut.fit.tjv.chukavol.dto.SubjectCreateDTO;
 import cz.cvut.fit.tjv.chukavol.dto.SubjectDTO;
-import cz.cvut.fit.tjv.chukavol.entity.Subject;
 import cz.cvut.fit.tjv.chukavol.service.SubjectService;
 import cz.cvut.fit.tjv.chukavol.service.exception.ExistingEntityException;
 import cz.cvut.fit.tjv.chukavol.service.exception.NonExistingEntityException;
-import org.springframework.data.domain.Page;
 import org.springframework.hateoas.Link;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -37,9 +35,8 @@ public class SubjectContoller {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<SubjectDTO> create(@RequestBody SubjectCreateDTO subject) {
+    public ResponseEntity<SubjectDTO> create(@RequestBody SubjectCreateDTO newSubject) {
         try {
-            SubjectCreateDTO newSubject = new SubjectCreateDTO(subject.getSubjectCode(),subject.getNumberOfCredits());
             SubjectDTO created = subjectService.create(newSubject);
             return ResponseEntity
                     .created(Link.of("http://localhost:8080/orders/" + created.getSubjectId()).toUri())
