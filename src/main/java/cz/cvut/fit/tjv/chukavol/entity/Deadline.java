@@ -6,10 +6,11 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@SequenceGenerator(name="deadline_id_seq", initialValue=50)
 public class Deadline {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="deadline_id_seq")
     private int deadlineId;
 
     @NotNull

@@ -5,10 +5,11 @@ import javax.persistence.*;
 
 
 @Entity
+@SequenceGenerator(name="subject_id_seq", initialValue=50)
 public class Subject {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="subject_id_seq")
     private int subjectId;
 
     @NotNull

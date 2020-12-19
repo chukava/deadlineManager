@@ -1,17 +1,17 @@
 package cz.cvut.fit.tjv.chukavol.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
-
 import javax.persistence.*;
-import java.util.List;
+
 
 
 @Entity
+@SequenceGenerator(name="student_id_seq", initialValue=50)
 public class Student {
 
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="student_id_seq")
     private int studentId;
 
     @NotNull
