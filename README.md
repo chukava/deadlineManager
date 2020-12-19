@@ -1,4 +1,4 @@
-##Requarments:
+## Requirements:
 1. jdk 11
 2. gradle
 3. MySql
