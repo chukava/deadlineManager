@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 
 @Entity
-@SequenceGenerator(name="subject_id_seq", initialValue=50)
+@SequenceGenerator(name="subject_id_seq", initialValue=50, allocationSize = 1)
 public class Subject {
 
     @Id

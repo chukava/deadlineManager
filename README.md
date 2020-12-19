@@ -18,13 +18,13 @@
    
 First of all, you would need to install the database system MySQL 5.0. http://dev.mysql.com/downloads/.
 
-To start using MySql
+#### To start using MySql
     
     • sudo mysql -p
-For having access to database from project you need to create a database named “deadlineManager” using MySQL. 
+#### For having access to database from project you need to create a database named “deadlineManager” using MySQL. 
     
     • create database deadlineManager;
-Create user 
+#### Create user 
     
     • create user ‘mysql’@‘%’ identified by ‘mysql‘;
     • grant all on deadlineManager.* to ‘mysql’@‘%’;

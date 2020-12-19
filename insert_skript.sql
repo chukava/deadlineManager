@@ -6,6 +6,8 @@ INSERT INTO student (student_id,student_username,password,grade) VALUES (5,'lenp
 INSERT INTO student (student_id,student_username,password,grade) VALUES (6,'dlospev', 'okurka1234',2);
 INSERT INTO student (student_id,student_username,password,grade) VALUES (7,'jahpet', 'fffffffff',2);
 INSERT INTO student (student_id,student_username,password,grade) VALUES (8,'ivannn43', 'jesusLovesyou',2);
+INSERT INTO student (student_id,student_username,password,grade) VALUES (9,'ianna3', 'iNEEDcoFFe',2);
+
 
 INSERT INTO subject (subject_id, number_of_credits, subject_code) VALUES (11,5,'BI-ZDM');
 INSERT INTO subject (subject_id, number_of_credits, subject_code) VALUES (12,6,'BI-AAG');

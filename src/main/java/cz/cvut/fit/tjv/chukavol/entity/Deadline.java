@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@SequenceGenerator(name="deadline_id_seq", initialValue=50)
+@SequenceGenerator(name="deadline_id_seq", initialValue=50, allocationSize = 1)
 public class Deadline {
 
     @Id
