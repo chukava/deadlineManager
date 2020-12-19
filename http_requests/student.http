@@ -1,0 +1,55 @@
+GET http://localhost:8080/student/1
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/student/all
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/student/all?page=0&size=3
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+
+GET http://localhost:8080/student/all/17
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+POST http://localhost:8080/student/
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "studentUsername": "Olia883",
+  "password": "helloworld3",
+  "grade" : 3
+}
+
+###
+
+PUT http://localhost:8080/student/8
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "studentUsername": "Oulia",
+  "password": "helloworld",
+  "grade" : 1
+}
+
+###
+
+DELETE http://localhost:8080/student/7
+Cache-Control: no-cache
+Content-Type: application/json
+

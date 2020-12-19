@@ -1,0 +1,51 @@
+GET http://localhost:8080/deadline/27
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/deadline/all
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/deadline/all?page=1&size=3
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+POST http://localhost:8080/deadline/
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "taskDescription": "1 d u",
+  "deadlineDate": "26.12.2020",
+  "maxPoints": 6,
+  "studentsId" : [1,2],
+  "subjectId" : 11
+}
+
+###
+
+PUT http://localhost:8080/deadline/28
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "taskDescription": "10 d u",
+  "deadlineDate": "26.12.2020",
+  "maxPoints": 10,
+  "studentsId" : [2,3],
+  "subjectId" : 17
+}
+
+###
+
+DELETE http://localhost:8080/deadline/26
+Cache-Control: no-cache
+Content-Type: application/json

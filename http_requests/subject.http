@@ -1,0 +1,40 @@
+GET http://localhost:8080/subject/13
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/subject/all?page=0&size=3
+Cache-Control: no-cache
+Content-Type: application/json
+
+###
+
+POST http://localhost:8080/subject
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "subjectCode": "BI-TJVg3",
+  "numberOfCredits": 9
+}
+
+###
+
+PUT http://localhost:8080/subject/16
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "subjectCode": "BI-AG2",
+  "numberOfCredits": 5
+}
+
+###
+
+DELETE http://localhost:8080/subject/17
+Cache-Control: no-cache
+Content-Type: application/json
+
