@@ -24,7 +24,7 @@ public class SubjectContoller {
     }
 
     @GetMapping("/{id}")
-    SubjectDTO byId(@PathVariable int id) {
+    public SubjectDTO byId(@PathVariable int id) {
         return subjectService.findByIdAsDTO(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 

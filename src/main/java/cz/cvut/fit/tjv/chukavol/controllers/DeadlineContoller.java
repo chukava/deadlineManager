@@ -38,7 +38,7 @@ public class DeadlineContoller {
         try{
             DeadlineDTO created = deadlineService.create(newDeadline);
             return ResponseEntity
-                    .created(Link.of("http://localhost:8080/deadlines/" + created.getDeadlineId()).toUri())
+                    .created(Link.of("http://localhost:8080/deadline/" + created.getDeadlineId()).toUri())
                     .body(created);
         }
         catch (NonExistingEntityException e){
